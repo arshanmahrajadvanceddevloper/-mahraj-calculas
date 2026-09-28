@@ -1,0 +1,39 @@
+{
+  "id": "/",
+  "name": "Mahraj Calculus",
+  "short_name": "MahrajCalc",
+  "description": "Advanced scientific calculator with physics, chemistry, and forex features, plus a digital library.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0a0c",
+  "theme_color": "#0a0a0c",
+  "categories": ["education", "productivity", "utilities"],
+  "icons": [
+    {
+      "src": "/app-logo.jpg",
+      "sizes": "192x192 512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/app-logo.jpg",
+      "sizes": "192x192 512x512",
+      "type": "image/jpeg",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/app-logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/jpeg",
+      "purpose": "any"
+    },
+    {
+      "src": "/app-logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/jpeg",
+      "purpose": "maskable"
+    }
+  ]
+}

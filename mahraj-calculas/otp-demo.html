@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Email OTP Verification Portal</title>
+    
+    <!-- Design Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@450;550;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    boxShadow: {
+                        'glow-blue': '0 0 30px rgba(14, 165, 233, 0.15)',
+                        'glow-emerald': '0 0 30px rgba(16, 185, 129, 0.2)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0b0f19;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(30, 41, 59, 0.3) 0, transparent 50%), 
+                radial-gradient(at 100% 100%, rgba(15, 23, 42, 0.5) 0, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(14, 165, 233, 0.05) 0, transparent 85%);
+        }
+        .step-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-100 font-sans flex flex-col justify-between p-4 sm:p-6 md:p-8">
+
+    <!-- Header Section -->
+    <header class="w-full max-w-md mx-auto text-center pt-4 pb-2">
+        <div class="inline-flex items-center gap-2 bg-slate-900/65 border border-slate-800 px-3 py-1.5 rounded-full text-xs text-sky-450 font-medium tracking-wide">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>Production-Ready SRE Gateway</span>
+        </div>
+    </header>
+
+    <!-- Main Card Body -->
+    <main class="w-full max-w-md mx-auto my-auto py-6">
+        <div class="bg-slate-900/40 backdrop-blur-xl border border-slate-800/80 rounded-2xl shadow-glow-blue p-6 sm:p-8 relative overflow-hidden">
+            <!-- Decorative Light Accent -->
+            <div class="absolute -top-10 left-1/2 -translate-x-1/2 w-40 h-20 bg-sky-500/10 rounded-full blur-[40px] pointer-events-none"></div>
+
+            <!-- Header Indicator -->
+            <div class="text-center mb-8 relative z-10">
+                <div class="w-12 h-12 rounded-xl bg-slate-850 border border-slate-800/80 flex items-center justify-center mx-auto mb-4 text-sky-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <h1 id="portal-title" class="text-2xl font-extrabold tracking-tight text-white mb-1.5">Gateway Access</h1>
+                <p id="portal-subtitle" class="text-slate-400 text-xs leading-relaxed max-w-[280px] mx-auto">Verify your security matrix clearance with a 6-digit email confirmation key.</p>
+            </div>
+
+            <!-- Dynamic Action/Status Alert Banner -->
+            <div id="status-banner" class="hidden transform translate-y-2 opacity-0 step-transition mb-6 p-3.5 rounded-xl text-xs flex items-start gap-2.5 border">
+                <div class="p-0.5 shrink-0" id="banner-icon-slot"></div>
+                <div id="banner-text-slot" class="leading-relaxed"></div>
+            </div>
+
+            <!-- SCREEN 1: Request OTP State (Visible by Default) -->
+            <div id="screen-request" class="space-y-6 step-transition">
+                <form id="form-request" class="space-y-5">
+                    <div class="space-y-2">
+                        <label for="input-email" class="block text-xs font-bold text-slate-400 uppercase tracking-widest">Email Address</label>
+                        <div class="relative">
+                            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
+                                </svg>
+                            </span>
+                            <input 
+                                type="email" 
+                                id="input-email" 
+                                required 
+                                placeholder="name@domain.com"
+                                class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 rounded-xl py-3.5 pl-11 pr-4 text-sm focus:outline-none focus:border-sky-500/60 focus:ring-1 focus:ring-sky-500/60 transition-all placeholder:text-slate-600 font-medium"
+                            >
+                        </div>
+                        <p class="text-[10.5px] text-slate-500 leading-normal">System clearances are audited. Ensure this matches your secure email mailbox.</p>
+                    </div>
+
+                    <button 
+                        type="submit" 
+                        id="btn-request"
+                        class="w-full bg-sky-500 hover:bg-sky-400 active:scale-98 text-slate-950 font-bold text-sm py-4 rounded-xl transition-all shadow-[0_4px_16px_rgba(14,165,233,0.25)] flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                        <span>Send Verification Code</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                </form>
+            </div>
+
+            <!-- SCREEN 2: Verify OTP State (Hidden initially) -->
+            <div id="screen-verify" class="hidden space-y-6 step-transition">
+                <!-- Transition/Go-Back Header -->
+                <div class="flex items-center justify-between border-b border-slate-800/60 pb-3 mb-2 text-xs">
+                    <button 
+                        type="button" 
+                        id="btn-back"
+                        class="text-slate-400 hover:text-white transition-colors flex items-center gap-1.5 focus:outline-none py-1 px-2 -ml-2 rounded-lg hover:bg-slate-800/40"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        <span>Change Email</span>
+                    </button>
+                    <span id="label-target-email" class="text-slate-400 font-mono text-[11px] truncate max-w-[180px]">email@gmail.com</span>
+                </div>
+
+                <form id="form-verify" class="space-y-5">
+                    <div class="space-y-2">
+                        <label for="input-otp" class="block text-xs font-bold text-slate-400 uppercase tracking-widest">6-Digit OTP Key</label>
+                        <div class="relative">
+                            <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                            </span>
+                            <input 
+                                type="text" 
+                                id="input-otp" 
+                                required 
+                                maxlength="6"
+                                placeholder="000000"
+                                pattern="\d{6}"
+                                class="w-full bg-slate-950/80 border border-slate-800 text-slate-100 rounded-xl py-3.5 pl-11 pr-4 text-center text-lg font-mono tracking-[0.4em] focus:outline-none focus:border-emerald-500/60 focus:ring-1 focus:ring-emerald-500/60 transition-all placeholder:text-slate-700 placeholder:tracking-normal font-bold"
+                            >
+                        </div>
+                        <p class="text-[10.5px] text-slate-500 leading-normal">Expiration timer: <span class="text-amber-500 font-medium">5 minutes</span>. Maximum allotment: 3 tries.</p>
+                    </div>
+
+                    <button 
+                        type="submit" 
+                        id="btn-verify"
+                        class="w-full bg-emerald-500 hover:bg-emerald-400 active:scale-98 text-slate-950 font-bold text-sm py-4 rounded-xl transition-all shadow-[0_4px_16px_rgba(16,185,129,0.25)] flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                        <span>Verify & Login</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
+                        </svg>
+                    </button>
+                    
+                    <button 
+                        type="button" 
+                        id="btn-resend"
+                        class="w-full bg-transparent hover:bg-slate-800/30 text-slate-400 hover:text-white border border-slate-800 font-semibold text-xs py-3 rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                        <span>Resend Code</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- SCREEN 3: Success Clearance Display Page -->
+            <div id="screen-success" class="hidden space-y-6 step-transition text-center">
+                <div class="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center mx-auto text-emerald-400 shadow-glow-emerald">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                
+                <div class="space-y-1">
+                    <h2 class="text-xl font-bold text-white">Security Clearance Verified</h2>
+                    <p class="text-slate-400 text-xs leading-normal">Session credentials confirmed and Firebase Custom Token issued.</p>
+                </div>
+
+                <!-- Custom Token Presentation Workspace -->
+                <div class="space-y-2 text-left">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Firebase Custom Token</span>
+                        <button id="btn-copy" class="text-[10px] font-semibold text-sky-400 hover:text-sky-300 transition-colors flex items-center gap-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a3 3 0 013-3h3a3 3 0 013 3m-.004 4H16m0 0H8m8 0v4m0-4L8 12" />
+                            </svg>
+                            <span id="copy-text">Copy Key</span>
+                        </button>
+                    </div>
+                    <div class="bg-slate-950 border border-slate-900 rounded-xl p-3.5 overflow-x-auto relative group">
+                        <code id="token-code-block" class="text-[11.5px] font-mono text-emerald-400 break-all select-all leading-relaxed leading-6 block whitespace-pre-wrap max-h-48 overflow-y-auto custom-scrollbar">No Token Cached</code>
+                    </div>
+                </div>
+
+                <div class="pt-2">
+                    <button 
+                        type="button" 
+                        id="btn-restart"
+                        class="w-full bg-slate-800 hover:bg-slate-700 text-slate-250 font-bold text-xs py-3.5 rounded-xl transition-all border border-slate-750/50 flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 15H19" />
+                        </svg>
+                        <span>Launch New Access Ticket</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Security Information -->
+    <footer class="w-full max-w-md mx-auto text-center text-[10.5px] text-slate-500 pb-4">
+        <p class="font-mono">Secure Auth Gateway v2.4 • Node.js Backend Proxied</p>
+    </footer>
+
+    <!-- Execution Script -->
+    <script>
+        // ============================================================================
+        // 1. CONFIGURATION PATHS
+        // ============================================================================
+        // Base API URL default. Exposes the config element cleanly for easy adjustments.
+        // Fallbacks automatically to origin address if accessed in iframe sandbox.
+        const API_BASE_URL = 'http://localhost:3000';
+
+        // Current verification state metadata
+        let trackedState = {
+            email: '',
+            token: '',
+            isLocked: false
+        };
+
+        // DOM elements
+        const dom = {
+            title: document.getElementById('portal-title'),
+            subtitle: document.getElementById('portal-subtitle'),
+            banner: document.getElementById('status-banner'),
+            bannerIcon: document.getElementById('banner-icon-slot'),
+            bannerText: document.getElementById('banner-text-slot'),
+            
+            screenRequest: document.getElementById('screen-request'),
+            screenVerify: document.getElementById('screen-verify'),
+            screenSuccess: document.getElementById('screen-success'),
+            
+            formRequest: document.getElementById('form-request'),
+            formVerify: document.getElementById('form-verify'),
+            
+            inputEmail: document.getElementById('input-email'),
+            inputOtp: document.getElementById('input-otp'),
+            labelTargetEmail: document.getElementById('label-target-email'),
+            
+            btnRequest: document.getElementById('btn-request'),
+            btnVerify: document.getElementById('btn-verify'),
+            btnResend: document.getElementById('btn-resend'),
+            btnBack: document.getElementById('btn-back'),
+            btnCopy: document.getElementById('btn-copy'),
+            copyText: document.getElementById('copy-text'),
+            btnRestart: document.getElementById('btn-restart'),
+            tokenBlock: document.getElementById('token-code-block')
+        };
+
+        // Standard Icons for Status Banner
+        const bannerIcons = {
+            info: `<svg class="w-4 h-4 text-sky-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`,
+            error: `<svg class="w-4 h-4 text-rose-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>`,
+            success: `<svg class="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>`
+        };
+
+        // ============================================================================
+        // 2. HELPER UTILITIES
+        // ============================================================================
+        function displayBanner(message, type = 'info') {
+            dom.banner.classList.remove('hidden');
+            // Reflow repaint to trigger CSS animations smoothly
+            dom.banner.getBoundingClientRect();
+            dom.banner.classList.add('opacity-100', 'translate-y-0');
+            
+            dom.bannerText.innerText = message;
+            dom.bannerIcon.innerHTML = bannerIcons[type] || '';
+            
+            // Adjust colors of alert container
+            dom.banner.className = "mb-6 p-4 rounded-xl text-xs flex items-start gap-2.5 transition-all duration-300 border " + 
+                (type === 'error' ? "border-rose-500/20 bg-rose-500/10 text-rose-400" :
+                 type === 'success' ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-450" :
+                 "border-slate-800 bg-slate-850 text-slate-350");
+        }
+
+        function hideBanner() {
+            dom.banner.classList.add('hidden', 'opacity-0', 'translate-y-2');
+        }
+
+        function toggleLoading(button, text, isRunning) {
+            if (isRunning) {
+                button.disabled = true;
+                button.classList.add('brightness-75', 'cursor-not-allowed');
+                button.innerHTML = `
+                    <svg class="animate-spin h-4 w-4 text-current" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                    <span>${text}</span>
+                `;
+            } else {
+                button.disabled = false;
+                button.classList.remove('brightness-75', 'cursor-not-allowed');
+            }
+        }
+
+        // Handles smooth slide-fades of form steps
+        function transitionToScreen(incomingDomElement) {
+            const screens = [dom.screenRequest, dom.screenVerify, dom.screenSuccess];
+            
+            screens.forEach(scr => {
+                if (scr !== incomingDomElement) {
+                    scr.classList.add('hidden');
+                }
+            });
+            
+            incomingDomElement.classList.remove('hidden');
+            incomingDomElement.getBoundingClientRect(); // Triggers Reflow
+        }
+
+        // ============================================================================
+        // 3. SECURE ENDPOINT CONTROLLERS
+        // ============================================================================
+        async function handleSendEmailOtp(email) {
+            hideBanner();
+            toggleLoading(dom.btnRequest, 'Sending security code...', true);
+            
+            try {
+                const endpoint = `${API_BASE_URL}/api/auth/otp/send`;
+                console.info('🛡️ Dispatched Security Transaction [GET_OTP] to:', endpoint);
+                
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    const errorDetail = data.error || 'General delivery block. Please verify configuration.';
+                    throw new Error(errorDetail);
+                }
+
+                // Clean routing transitions upon backend receipt confirmation
+                trackedState.email = email;
+                dom.labelTargetEmail.innerText = email;
+                
+                // Switch interface to secondary screening layout
+                dom.title.innerText = "Clearance Code";
+                dom.subtitle.innerText = "Check your email. We dispatched a valid 6-digit confirmation ticket.";
+                
+                transitionToScreen(dom.screenVerify);
+                displayBanner(`OTP code sent successfully to ${email}.`, 'success');
+                dom.inputOtp.focus();
+
+            } catch (err) {
+                console.error('🔥 Transaction failure [GET_OTP] failed processing:', err);
+                displayBanner(`Dispatch failure: ${err.message}`, 'error');
+            } finally {
+                toggleLoading(dom.btnRequest, 'Send Verification Code', false);
+                dom.btnRequest.innerHTML = `
+                    <span>Send Verification Code</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                `;
+            }
+        }
+
+        async function handleVerifyEmailOtp(email, otp) {
+            hideBanner();
+            toggleLoading(dom.btnVerify, 'Authorizing security token...', true);
+            
+            try {
+                const endpoint = `${API_BASE_URL}/api/auth/otp/verify`;
+                console.info('🛡️ Dispatched Verification Request [VERIFY_OTP] to:', endpoint);
+                
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, otp })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    const errorDetail = data.error || 'Verification failure. Verify validity of OTP code.';
+                    throw new Error(errorDetail);
+                }
+
+                // Verification Authorization Granted
+                const customFirebaseToken = data.firebaseToken;
+                trackedState.token = customFirebaseToken;
+                
+                // Record context trace securely inside developer console console
+                console.log('✅ Gateway Verified Successfully! Firebase customToken:', customFirebaseToken);
+                
+                // Format card graphics and display details
+                dom.title.innerText = "Identity Authenticated";
+                dom.subtitle.innerText = "Clearance confirmed. Active credentials issued.";
+                dom.tokenBlock.innerText = customFirebaseToken;
+                
+                transitionToScreen(dom.screenSuccess);
+                
+                // Show core alert popup
+                alert("Access Granted! Logging you in...");
+
+            } catch (err) {
+                console.error('🔥 Verification failure during verification protocol:', err);
+                displayBanner(`Verification Blocked: ${err.message}`, 'error');
+            } finally {
+                toggleLoading(dom.btnVerify, 'Verify & Login', false);
+                dom.btnVerify.innerHTML = `
+                    <span>Verify & Login</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4" />
+                    </svg>
+                `;
+            }
+        }
+
+        // ============================================================================
+        // 4. ACTION INTERACT SYSTEM EVENTS
+        // ============================================================================
+        dom.formRequest.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const mailVal = dom.inputEmail.value.trim();
+            if (mailVal) {
+                handleSendEmailOtp(mailVal);
+            }
+        });
+
+        dom.formVerify.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const otpCode = dom.inputOtp.value.trim().replace(/\D/g, '');
+            if (otpCode.length !== 6) {
+                displayBanner('Invalid payload size. Verification code must be exactly 6 numeric digits.', 'error');
+                return;
+            }
+            handleVerifyEmailOtp(trackedState.email, otpCode);
+        });
+
+        // OTP key sanitization (Allow numeric characters only)
+        dom.inputOtp.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+
+        dom.btnBack.addEventListener('click', () => {
+            hideBanner();
+            dom.title.innerText = "Gateway Access";
+            dom.subtitle.innerText = "Verify your security matrix clearance with a 6-digit email confirmation key.";
+            transitionToScreen(dom.screenRequest);
+        });
+
+        dom.btnResend.addEventListener('click', () => {
+            if (trackedState.email) {
+                handleSendEmailOtp(trackedState.email);
+            }
+        });
+
+        dom.btnCopy.addEventListener('click', () => {
+            if (!trackedState.token) return;
+            navigator.clipboard.writeText(trackedState.token).then(() => {
+                dom.copyText.innerText = "Token Copied!";
+                dom.copyText.classList.add('text-emerald-400');
+                setTimeout(() => {
+                    dom.copyText.innerText = "Copy Key";
+                    dom.copyText.classList.remove('text-emerald-400');
+                }, 2000);
+            }).catch(e => {
+                console.error('[CLIPBOARD FAILURE] Permission restricted or unsupported by environment:', e);
+            });
+        });
+
+        dom.btnRestart.addEventListener('click', () => {
+            trackedState = { email: '', token: '', isLocked: false };
+            dom.inputEmail.value = '';
+            dom.inputOtp.value = '';
+            dom.tokenBlock.innerText = 'No Token Cached';
+            hideBanner();
+            
+            dom.title.innerText = "Gateway Access";
+            dom.subtitle.innerText = "Verify your security matrix clearance with a 6-digit email confirmation key.";
+            transitionToScreen(dom.screenRequest);
+        });
+    </script>
+</body>
+</html>

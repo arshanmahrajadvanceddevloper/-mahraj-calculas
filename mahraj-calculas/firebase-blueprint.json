@@ -1,0 +1,146 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "Information about a user.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Auth UID"
+        },
+        "email": {
+          "type": "string",
+          "description": "User email address"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Customizable user display name"
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "URL of profile photo"
+        },
+        "bio": {
+          "type": "string",
+          "description": "User bio or short summary"
+        },
+        "profession": {
+          "type": "string",
+          "description": "User's profession or educational level"
+        },
+        "themeTint": {
+          "type": "string",
+          "description": "Favorite accent color of the user"
+        },
+        "createdAt": {
+          "type": "timestamp"
+        }
+      },
+      "required": ["userId", "createdAt"]
+    },
+    "Calculation": {
+      "title": "Calculation History",
+      "description": "A calculation performed by the user.",
+      "type": "object",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "Calculator mode (e.g. math, physics)"
+        },
+        "expression": {
+          "type": "string"
+        },
+        "result": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "timestamp"
+        }
+      },
+      "required": ["mode", "expression", "result", "createdAt"]
+    },
+    "PhoneOtp": {
+      "title": "Phone SMS OTP Transaction",
+      "description": "Cryptographically secure SMS OTP verification document.",
+      "type": "object",
+      "properties": {
+        "phoneNumber": {
+          "type": "string",
+          "description": "Normalized E.164 phone number"
+        },
+        "otpCode": {
+          "type": "string",
+          "description": "SHA-256 secure hash of 6-digit verification code"
+        },
+        "createdAt": {
+          "type": "timestamp",
+          "description": "Timestamp of initial code dispatch"
+        },
+        "expiresAt": {
+          "type": "timestamp",
+          "description": "Strict 5-minute expiration boundary"
+        },
+        "attempts": {
+          "type": "number",
+          "description": "Failure retry counter (strictly bounded to max 3)"
+        }
+      },
+      "required": ["phoneNumber", "otpCode", "createdAt", "expiresAt", "attempts"]
+    },
+    "EmailOtp": {
+      "title": "Email OTP Registry",
+      "description": "Securely stored SHA-256 OTP transaction for email authorization.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Normalized lowercase email address"
+        },
+        "hashedOtp": {
+          "type": "string",
+          "description": "Cryptographically secure SHA-256 hashed OTP (Hex)"
+        },
+        "createdAt": {
+          "type": "timestamp",
+          "description": "Generation timestamp"
+        },
+        "expiresAt": {
+          "type": "timestamp",
+          "description": "Strict 5-minute lifespan"
+        },
+        "attemptsCount": {
+          "type": "number",
+          "description": "Failure retry counter (limit 3)"
+        }
+      },
+      "required": ["email", "hashedOtp", "createdAt", "expiresAt", "attemptsCount"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "User profiles"
+    },
+    "/users/{userId}/calculations/{calculationId}": {
+      "schema": {
+        "$ref": "#/entities/Calculation"
+      },
+      "description": "Calculations made by the user."
+    },
+    "/phone_otps/{phoneNumber}": {
+      "schema": {
+        "$ref": "#/entities/PhoneOtp"
+      },
+      "description": "SMS verification keys mapped to E.164 identifier keys"
+    },
+    "/otp_registry/{email}": {
+      "schema": {
+        "$ref": "#/entities/EmailOtp"
+      },
+      "description": "Highly resilient email security registry mapping"
+    }
+  }
+}

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="google-site-verification" content="2aqOed8YVro_GFSPIfTkUQiiXJnzWdlj4iRoxfmkEJM" />
+    <title>Mahraj Calculus – Smart Scientific & Financial Calculator</title>
+    <meta name="description" content="Advanced scientific calculator with physics, chemistry, forex, unit converter, and AI exploration tools." />
+    <meta name="keywords" content="scientific calculator, math calculator, physics formula, chemistry solver, forex rates, calculus" />
+    <meta name="author" content="Mahraj Calculus" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- OpenGraph Social Cards -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mahraj Calculus – Smart Scientific Calculator" />
+    <meta property="og:description" content="Perform advanced scientific math, physics & chemistry calculations, live currency exchange, and AI problem solving." />
+    <meta property="og:image" content="/app-logo.png" />
+    <meta property="og:site_name" content="Mahraj Calculus" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Mahraj Calculus – Smart Scientific Calculator" />
+    <meta name="twitter:description" content="Perform advanced scientific math, physics & chemistry calculations, live currency exchange, and AI problem solving." />
+    <meta name="twitter:image" content="/app-logo.png" />
+
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Mahraj Calculus",
+      "applicationCategory": "EducationalApplication",
+      "operatingSystem": "All",
+      "description": "Advanced scientific calculator featuring calculus, physics constants, chemistry molecular formulas, real-time currency conversion, and voice math solver.",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+    <link rel="icon" type="image/png" href="/app-logo.png" />
+    
+    <!-- PWA Setup -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#0a0a0c" />
+    
+    <!-- iOS Support -->
+    <link rel="apple-touch-icon" href="/app-logo.png" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="MahrajCalc" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').then((registration) => {
+            console.log('SW registered: ', registration);
+          }).catch((registrationError) => {
+            console.log('SW registration failed: ', registrationError);
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

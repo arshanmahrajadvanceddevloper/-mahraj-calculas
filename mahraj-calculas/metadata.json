@@ -1,0 +1,6 @@
+{
+  "name": "Mahraj Calculus",
+  "description": "A clean, basic calculator application.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
